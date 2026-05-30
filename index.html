@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sayan | Portfolio</title>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+  <script src="https://unpkg.com/lenis/dist/lenis.min.js"></script>
+  <style>
+/* ── Reset & Base ── */
+:root {
+  --primary: #5918c2;
+  --primary-light: #7132ca;
+  --accent: #a855f7;
+}
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: rgb(255,255,255);
+  overflow-x: hidden;
+  font-family: sans-serif;
+  scroll-snap-type: y mandatory;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0; bottom: 0;
+  min-width: 100%; min-height: 100%;
+}
+
+/* ── Header ── */
+header {
+  background: transparent;
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0; width: 100%;
+  z-index: 1000;
+}
+.logo { display: flex; gap: 70px; }
+.btn {
+  width: 10vh; height: 30px; padding: 2px;
+  border-radius: 10px; border: 1px solid #000;
+  background: black; color: #fff;
+  font-size: 15px; font-weight: 600;
+  font-family: 'Gill Sans', Calibri, sans-serif;
+  cursor: pointer;
+}
+.btn:hover { background: transparent; backdrop-filter: blur(50px); }
+
+/* ── Sections ── */
+section {
+  height: 100vh;
+  display: flex; justify-content: center; align-items: center;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+/* ── Common Container ── */
+.moth, .moth1, .moth2, .moth4 {
+  background: transparent;
+  overflow: hidden;
+  height: 750px; width: 170vh;
+  padding: 80px;
+  border-radius: 50px;
+  box-shadow: 0 0 15px #00000033;
+  display: flex; align-items: center;
+  margin-top: 50px;
+  backdrop-filter: blur(50px);
+}
+.moth4 { justify-content: center; }
+.moth { flex-direction: row; justify-content: center; gap: 80px; }
+.moth1 { flex-direction: row; justify-content: space-around; gap: 100px; }
+.moth2 { flex-direction: column; justify-content: space-around; gap: 50px; }
+
+/* ── Inner image (fallback) ── */
+.inner1 {
+  width: 45vh; height: 600px;
+  background-color: #803dec;
+  background-image: url(IMG_20250313_104217-removebg-preview.png);
+  background-repeat: no-repeat; background-size: cover; background-position: center;
+  border: 1px solid #000;
+  border-radius: 100px;
+  opacity: 0;
+  animation: fadeSlideIn 1.2s ease forwards;
+}
+
+/* ── Text ── */
+.text, .text1 {
+  color: black; font-size: 40px; text-align: center;
+  font-family: Copperplate; width: 50vh;
+  animation: fadeSlideIn 1.2s ease forwards;
+}
+p {
+  font-family: 'Gill Sans', Calibri, sans-serif;
+  color: black; font-size: 21px; text-align: center;
+}
+h1 { color: #000; font-size: 40px; font-weight: 700; font-family: Verdana, sans-serif; }
+
+/* ── Hover underline ── */
+.hover-underline-animation { position: relative; display: inline-block; }
+.hover-underline-animation::after {
+  content: ''; position: absolute; width: 100%; transform: scaleX(0);
+  height: 5px; bottom: 0; left: 0;
+  background-color: #6200ff;
+  transition: transform 0.25s ease-out; transform-origin: bottom center;
+}
+.hover-underline-animation:hover::after { transform: scaleX(1); }
+
+/* ── "I'am" ── */
+.tt::after { content: " Sayan"; font-size: 80px; color: #5918c2; font-weight: 700; }
+
+/* ── Glow Button ── */
+.glow-on-hover {
+  width: 220px; font-size: 25px; height: 50px;
+  border: none; outline: none; color: #5918c2; background: #fff;
+  cursor: pointer; position: relative; z-index: 0; border-radius: 10px;
+}
+.glow-on-hover:before {
+  content: '';
+  background: linear-gradient(45deg, #ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000);
+  position: absolute; top: -2px; left: -2px;
+  background-size: 400%; z-index: -1; filter: blur(5px);
+  width: calc(100% + 4px); height: calc(100% + 4px);
+  animation: glowing 5s linear infinite; opacity: 0;
+  transition: opacity .2s ease-in-out; border-radius: 10px;
+}
+.glow-on-hover:hover:before { opacity: 1; }
+.glow-on-hover:after {
+  content: ''; position: absolute; width: 100%; height: 100%;
+  background: #fff; left: 0; top: 0; z-index: -1;
+  border-radius: 10px; border: 1px solid #000;
+}
+
+/* ── Skills / Torus ── */
+#torus-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 50px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+#torus-canvas-area {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+#torus-canvas-area canvas { display: block; width: 100% !important; height: 100% !important; }
+.marquee-container {
+  width: 100%;
+  height: 100px;
+  padding: 10px 0;
+  position: relative;
+  background: #F7DDC5;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.marquee-viewport { overflow: hidden; width: 100%; height: 100%; }
+.marquee-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+  animation: marqueeScroll 32s linear infinite;
+}
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  margin: 0 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  cursor: default;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  width: 90px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.tech-item:hover {
+  background: rgba(127,90,240,0.12);
+  border-color: rgba(127,90,240,0.4);
+  transform: translateY(-3px);
+}
+.tech-item:hover .tech-logo svg { filter: drop-shadow(0 0 8px var(--tech-color, #7f5af0)); }
+.tech-logo { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.tech-logo svg { width: 100%; height: 100%; }
+.tech-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #6b6b80;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  white-space: nowrap;
+}
+.tech-item:hover .tech-name { color: #000; }
+.tech-divider {
+  display: flex; align-items: center; justify-content: center;
+  width: 14px; flex-shrink: 0;
+  color: rgba(127,90,240,0.25);
+}
+
+/* ── Works (se4) ── */
+#se4 { display: flex; justify-content: center; align-items: center; height: 100vh; }
+.moth3 {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  height: 750px; width: 170vh; padding: 20px;
+  backdrop-filter: blur(50px); border-radius: 50px;
+  box-shadow: 0 0 15px #00000033;
+}
+.container { width: 70%; height: 450px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+.container img { width: 20%; height: 100%; object-fit: cover; border-radius: 10px; border: 2px solid rgba(255,255,255,.684); transition: all ease-in-out 0.5s; }
+.container img:hover { width: 50%; }
+
+/* ── Contact (new) ── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+.contact-root { font-family: 'Syne', sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
+.contact-label { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#9a9ab0; margin-bottom:10px; }
+.contact-h1 { font-size:clamp(28px,5vw,44px); font-weight:800; letter-spacing:-0.02em; background:linear-gradient(135deg,#111118 30%,#5a5a7a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0 0 36px; }
+.card-list { display:flex; flex-direction:column; gap:14px; width:100%; max-width:560px; }
+.contact-card {
+  background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:20px;
+  cursor:pointer; position:relative;
+  transition:border-color 0.25s,box-shadow 0.25s,transform 0.22s ease,opacity 0.15s ease;
+  opacity:0; transform:translateY(18px);
+  animation:cFadeUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.contact-card:nth-child(1){animation-delay:0.05s}.contact-card:nth-child(2){animation-delay:0.14s}
+.contact-card:nth-child(3){animation-delay:0.23s}.contact-card:nth-child(4){animation-delay:0.32s}
+.contact-card:nth-child(5){animation-delay:0.41s}
+@keyframes cFadeUp{to{opacity:1;transform:translateY(0)}}
+.contact-card:hover{border-color:rgba(0,0,0,0.16);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.1)}
+.contact-card.dimmed{opacity:0!important;pointer-events:none;transform:scale(0.97)}
+.contact-card.source-hidden{opacity:0!important}
+[data-id="github"].contact-card:hover{border-color:rgba(36,41,47,0.3)}
+[data-id="email"].contact-card:hover{border-color:rgba(234,67,53,0.3)}
+[data-id="instagram"].contact-card:hover{border-color:rgba(225,48,108,0.3)}
+[data-id="x"].contact-card:hover{border-color:rgba(0,0,0,0.25)}
+[data-id="facebook"].contact-card:hover{border-color:rgba(24,119,242,0.3)}
+.c-card-header{display:flex;align-items:center;gap:16px;padding:20px 22px}
+.c-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#f0f0f5;border:1px solid rgba(0,0,0,0.08)}
+.c-icon-wrap svg{width:26px;height:26px}
+[data-id="github"] .c-icon-wrap{border-color:rgba(36,41,47,0.15)}
+[data-id="email"] .c-icon-wrap{border-color:rgba(234,67,53,0.22)}
+[data-id="instagram"] .c-icon-wrap{border-color:rgba(225,48,108,0.22)}
+[data-id="x"] .c-icon-wrap{border-color:rgba(0,0,0,0.15)}
+[data-id="facebook"] .c-icon-wrap{border-color:rgba(24,119,242,0.22)}
+.c-card-meta{flex:1;min-width:0}
+.c-card-title{font-size:17px;font-weight:700;letter-spacing:-0.01em;color:#111118;margin-bottom:2px}
+.c-card-subtitle{font-size:13px;color:#5a5a7a;font-family:'DM Mono',monospace}
+.c-card-badge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;white-space:nowrap}
+[data-id="github"] .c-card-badge{color:#24292f;background:rgba(36,41,47,0.08)}
+[data-id="email"] .c-card-badge{color:#ea4335;background:rgba(234,67,53,0.1)}
+[data-id="instagram"] .c-card-badge{color:#e1306c;background:rgba(225,48,108,0.1)}
+[data-id="x"] .c-card-badge{color:#000;background:rgba(0,0,0,0.07)}
+[data-id="facebook"] .c-card-badge{color:#1877f2;background:rgba(24,119,242,0.1)}
+.c-chevron{width:20px;height:20px;color:#9a9ab0;flex-shrink:0}
+#cModal{
+  position:fixed;z-index:10020;border-radius:20px;background:#fff;
+  border:1px solid rgba(0,0,0,0.16);box-shadow:0 20px 60px rgba(0,0,0,0.15),0 0 0 1px rgba(0,0,0,0.06);
+  overflow:hidden;pointer-events:none;top:0;left:0;width:0;height:0;opacity:0;
+  will-change:top,left,width,height,opacity;
+}
+#cModal.transitioning{transition:top 0.52s cubic-bezier(0.16,1,0.3,1),left 0.52s cubic-bezier(0.16,1,0.3,1),width 0.52s cubic-bezier(0.16,1,0.3,1),height 0.52s cubic-bezier(0.16,1,0.3,1),opacity 0.3s ease}
+#cModal.closing{transition:top 0.52s cubic-bezier(0.16,1,0.3,1),left 0.52s cubic-bezier(0.16,1,0.3,1),width 0.52s cubic-bezier(0.16,1,0.3,1),height 0.52s cubic-bezier(0.16,1,0.3,1),opacity 0.28s ease}
+#cModal.open{pointer-events:all}
+.c-modal-accent-bar{position:absolute;top:0;left:0;right:0;height:3px;z-index:1}
+[data-id="github"] .c-modal-accent-bar{background:linear-gradient(90deg,#24292f 0%,transparent 70%)}
+[data-id="email"] .c-modal-accent-bar{background:linear-gradient(90deg,#ea4335 0%,transparent 70%)}
+[data-id="instagram"] .c-modal-accent-bar{background:linear-gradient(90deg,#f58529,#dd2a7b,#8134af,transparent 80%)}
+[data-id="x"] .c-modal-accent-bar{background:linear-gradient(90deg,#000 0%,transparent 70%)}
+[data-id="facebook"] .c-modal-accent-bar{background:linear-gradient(90deg,#1877f2 0%,transparent 70%)}
+.c-modal-close{position:absolute;top:16px;right:16px;z-index:5;width:30px;height:30px;border-radius:50%;border:1px solid rgba(0,0,0,0.08);background:#f0f0f5;color:#5a5a7a;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease 0.3s,background 0.2s,transform 0.15s}
+#cModal.open .c-modal-close{opacity:1}
+.c-modal-close:hover{background:rgba(0,0,0,0.06);color:#111118;transform:scale(1.1)}
+#cModal .c-card-header{padding:28px 26px 22px}
+#cModal .c-icon-wrap{width:58px;height:58px;border-radius:14px}
+#cModal .c-icon-wrap svg{width:32px;height:32px}
+#cModal .c-card-title{font-size:22px}
+#cModal .c-card-badge{font-size:13px;padding:6px 14px}
+.c-modal-body{padding:20px 26px 28px;border-top:1px solid rgba(0,0,0,0.08);opacity:0;transform:translateY(10px);transition:opacity 0.3s ease 0.22s,transform 0.4s cubic-bezier(0.16,1,0.3,1) 0.22s}
+#cModal.open .c-modal-body{opacity:1;transform:translateY(0)}
+.c-card-details{font-size:15px;line-height:1.7;color:#5a5a7a;margin-bottom:20px}
+.c-card-handle{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:11px;color:#9a9ab0;letter-spacing:0.04em;margin-bottom:22px}
+.c-card-handle svg{width:13px;height:13px}
+.c-visit-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;border:none;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.01em;text-decoration:none;transition:opacity 0.18s,transform 0.18s}
+.c-visit-btn:hover{opacity:0.85;transform:scale(0.98)}
+[data-id="github"] .c-visit-btn{background:#24292f;color:#0d1117}
+[data-id="email"] .c-visit-btn{background:#ea4335;color:#fff}
+[data-id="instagram"] .c-visit-btn{background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);color:#fff}
+[data-id="x"] .c-visit-btn{background:#000;color:#fff;border:1px solid rgba(0,0,0,0.3)}
+[data-id="facebook"] .c-visit-btn{background:#1877f2;color:#fff}
+#cBackdrop{position:fixed;inset:0;z-index:10010;background:rgba(200,200,215,0.55);backdrop-filter:blur(20px) saturate(0.5);-webkit-backdrop-filter:blur(20px) saturate(0.5);opacity:0;pointer-events:none;transition:opacity 0.52s cubic-bezier(0.16,1,0.3,1)}
+#cBackdrop.visible{opacity:1;pointer-events:all}
+
+/* ── Blob ── */
+.blob-container { position: relative; width: 400px; height: 400px; }
+.blob-shape {
+  position: absolute; inset: 0;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--accent));
+  animation: morphBlob 8s ease-in-out infinite;
+  overflow: hidden;
+}
+.blob-glow {
+  position: absolute; inset: -6px;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  animation: morphBlob 8s ease-in-out infinite, rotateHue 12s linear infinite;
+  z-index: 0; filter: blur(4px); opacity: 0.85;
+}
+.blob-shape img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center top; border-radius: inherit;
+  mix-blend-mode: normal; opacity: 1; display: block; z-index: 2;
+}
+.blob-avatar-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 2; gap: .5rem;
+}
+.blob-avatar-placeholder svg { width: 100px; height: 100px; opacity: .55; }
+.blob-avatar-placeholder span {
+  font-family: sans-serif; font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+}
+
+/* ── Keyframes ── */
+@keyframes glowing {
+  0%   { background-position: 0 0; }
+  50%  { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+@keyframes fadeSlideIn {
+  0%   { opacity: 0; transform: translateY(100px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes morphBlob {
+  0%   { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25%  { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50%  { border-radius: 50% 50% 40% 60% / 40% 70% 60% 30%; }
+  75%  { border-radius: 40% 60% 60% 40% / 70% 30% 50% 50%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+@keyframes rotateHue {
+  0%   { filter: hue-rotate(0deg) blur(4px); }
+  100% { filter: hue-rotate(360deg) blur(4px); }
+}
+/* ── SEC1 Hero ── */
+.sec1{min-height:100vh;background:transparent;backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);display:flex;align-items:center;justify-content:center;padding:5rem 4rem;position:relative;overflow:hidden;}
+.sec1::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(113,50,202,.06) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(196,132,252,.07) 0%,transparent 50%);pointer-events:none;}
+.hero-inner{display:flex;align-items:center;justify-content:space-between;gap:4rem;max-width:1200px;width:100%;z-index:1;} .hero-inner p{text-align:left;font-family:'Space Grotesk',sans-serif;font-size:inherit;color:inherit;}
+.hero-left{flex-shrink:0;opacity:0;transform:translateX(-80px) scale(0.88);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1);}
+.hero-left.visible{opacity:1;transform:translateX(0) scale(1)}
+.hero-right{flex:1;display:flex;flex-direction:column;gap:1.4rem;opacity:0;transform:translateX(80px) scale(0.94);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1);text-align:left;}
+.hero-right.visible{opacity:1;transform:translateX(0) scale(1)}
+.hero-tag{font-family:'Space Grotesk',sans-serif;font-size:.6rem;letter-spacing:.45em;text-transform:uppercase;color:var(--primary);opacity:.8;margin:0;text-align:left;display:block;}
+.hero-greeting{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:300;color:#888;letter-spacing:.04em;margin:0;text-align:left;display:block;}
+.hero-name{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.6rem,5vw,4.4rem);font-weight:700;line-height:1.05;color:#0c0c0a;letter-spacing:-.025em;min-height:1.2em;margin:0;text-align:left;display:block;}
+.hero-role{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:400;color:var(--primary);letter-spacing:.03em;opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease;margin:0;text-align:left;display:block;}
+.hero-role.visible{opacity:1;transform:translateY(0)}
+.hero-bio{max-width:420px;line-height:1.85;color:#888;font-size:.88rem;opacity:0;transform:translateY(10px);transition:opacity .6s .1s ease,transform .6s .1s ease;margin:0;text-align:left;display:block;}
+.hero-bio.visible{opacity:1;transform:translateY(0)}
+.hero-cta{display:flex;align-items:center;gap:1.2rem;opacity:0;transform:translateY(10px);transition:opacity .6s .3s ease,transform .6s .3s ease;}
+.hero-cta.visible{opacity:1;transform:translateY(0)}
+.btn-primary{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;font-weight:600;padding:.65rem 1.6rem;background:var(--primary);color:#fff;border-radius:100px;text-decoration:none;transition:background .3s,transform .2s,box-shadow .3s;box-shadow:0 4px 22px rgba(113,50,202,.28);}
+.btn-primary:hover{background:var(--primary-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(113,50,202,.38)}
+.btn-ghost{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:#aaa;text-decoration:none;border-bottom:1px solid #ddd;padding-bottom:.15rem;transition:color .3s,border-color .3s;}
+.btn-ghost:hover{color:var(--primary);border-color:var(--primary)}
+@media(max-width:900px){
+  .blob-container{width:280px;height:280px;}
+  .hero-inner{flex-direction:column;text-align:center;padding:2rem 0;}
+  .hero-cta{justify-content:center;}
+  .hero-bio{max-width:100%;}
+}
+
+/* ── Stepper (se2) ── */
+.stepper-wrap { width: 100%; max-width: 820px; }
+.stepper { display: flex; align-items: center; margin-bottom: 28px; }
+.step {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+  transition: background .35s, border-color .35s, color .35s, box-shadow .35s;
+  border: 2px solid #d4d6db; color: #b0b3bb; background: #fff; cursor: default;
+}
+.step.done { background: #5b5bd6; border-color: #5b5bd6; color: #fff; box-shadow: 0 0 0 5px rgba(91,91,214,.15); }
+.step.active { background: #5b5bd6; border-color: #5b5bd6; color: #fff; box-shadow: 0 0 0 5px rgba(91,91,214,.18); }
+.step .check { display: none; }
+.step.done .check { display: block; }
+.step.done .num { display: none; }
+.connector { flex: 1; height: 2px; background: #e2e4e9; margin: 0 6px; border-radius: 2px; overflow: hidden; }
+.connector-fill { height: 100%; width: 0%; background: #5b5bd6; border-radius: 2px; transition: width .45s cubic-bezier(.65,0,.35,1); }
+.connector.filled .connector-fill { width: 100%; }
+.stepper-content { background: rgba(255,255,255,0.55); border-radius: 14px; min-height: 200px; margin-bottom: 22px; position: relative; overflow: hidden; backdrop-filter: blur(6px); border: 1px solid rgba(0,0,0,0.07); }
+.step-panel { position: absolute; inset: 0; padding: 28px 32px; opacity: 0; pointer-events: none; }
+.step-panel.active { opacity: 1; pointer-events: auto; }
+.step-panel h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif; }
+.step-panel p { font-size: 13.5px; color: #5a5a7a; line-height: 1.75; font-family: 'DM Sans', sans-serif; text-align: left; }
+.step-panel p strong { color: #1a1a2e; font-weight: 600; }
+.stepper-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.btn-sprev, .btn-snext {
+  padding: 9px 22px; border-radius: 10px;
+  font-family: 'DM Sans', 'Gill Sans', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; transition: background .2s, opacity .2s, transform .12s;
+}
+.btn-sprev:active:not(:disabled), .btn-snext:active:not(:disabled) { transform: scale(0.97); }
+.btn-sprev { background: transparent; color: #6b6f7e; border: 1.5px solid #e2e4e9; }
+.btn-sprev:hover:not(:disabled) { background: rgba(255,255,255,0.6); }
+.btn-sprev:disabled, .btn-snext:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-snext { background: #1a1a2e; color: #fff; }
+.btn-snext:hover:not(:disabled) { background: #2d2d4e; }
+.check-svg { width: 15px; height: 15px; }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop id="myVideo">
+    <source src="vid.mp4" type="video/mp4">
+  </video>
+
+  <header>
+    <div class="logo">
+      <a href="#se1"><button class="btn">Home</button></a>
+      <a href="#se2"><button class="btn">About</button></a>
+      <a href="#se3"><button class="btn">Skills</button></a>
+      <a href="#se4"><button class="btn">Work</button></a>
+      <a href="#se5"><button class="btn">Contact</button></a>
+    </div>
+  </header>
+
+  <!-- Section 1: Home -->
+  <section id="se1" class="section animated-section">
+    <div class="moth animate" style="padding:0;height:750px;width:170vh;overflow:hidden;">
+      <section class="sec1" style="width:100%;height:100%;border-radius:50px;min-height:unset;padding:3rem 4rem;background:rgba(245,244,239,0.55);">
+        <div class="hero-inner">
+          <div class="hero-left" id="heroLeft">
+            <div class="blob-container">
+              <div class="blob-glow"></div>
+              <div class="blob-shape">
+                <img src="sayan.png" alt="Sayan Bhattacharya"
+                     onerror="this.style.display='none';document.getElementById('blobPlaceholder').style.display='flex'"/>
+                <div class="blob-avatar-placeholder" id="blobPlaceholder" style="display:none">
+                  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="20" fill="rgba(255,255,255,0.4)"/>
+                    <ellipse cx="50" cy="80" rx="32" ry="22" fill="rgba(255,255,255,0.3)"/>
+                  </svg>
+                  <span>your photo here</span>
+                </div>
+              </div>
+              <div style="position:absolute;inset:-20px;border-radius:inherit;border:2px dashed rgba(113,50,202,0.25);animation:morphBlob 8s ease-in-out infinite;pointer-events:none;z-index:3;"></div>
+            </div>
+          </div>
+          <div class="hero-right" id="heroRight">
+            <p class="hero-tag">Portfolio · 2025</p>
+            <p class="hero-greeting">Hello, I'm</p>
+            <h1 class="hero-name"><span id="typedText"></span></h1>
+            <p class="hero-role" id="heroRole">Full Stack Developer &amp; Creative Technologist</p>
+            <p class="hero-bio" id="heroBio">
+              I craft thoughtful digital experiences at the intersection of engineering and design.
+              Passionate about building elegant interfaces, exploring new tech,
+              and turning ideas into polished products.
+            </p>
+            <div class="hero-cta" id="heroCta">
+              <a href="#se5" class="btn-primary">Explore my work ↓</a>
+              <a href="#se5" class="btn-ghost">Get in touch →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Section 2: About (Stepper) -->
+  <section id="se2" class="section animated-section">
+    <div class="moth4 animate" style="flex-direction:column;gap:0;">
+      <h1 class="hover-underline-animation" style="margin-bottom:32px;font-family:'Space Grotesk',sans-serif;font-size:32px;">About Me</h1>
+      <div class="stepper-wrap">
+        <div class="stepper" id="stepper">
+          <div class="step active" id="s1">
+            <span class="num">1</span>
+            <span class="check"><svg class="check-svg" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <div class="connector" id="c1"><div class="connector-fill"></div></div>
+          <div class="step" id="s2">
+            <span class="num">2</span>
+            <span class="check"><svg class="check-svg" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <div class="connector" id="c2"><div class="connector-fill"></div></div>
+          <div class="step" id="s3">
+            <span class="num">3</span>
+            <span class="check"><svg class="check-svg" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <div class="connector" id="c3"><div class="connector-fill"></div></div>
+          <div class="step" id="s4">
+            <span class="num">4</span>
+            <span class="check"><svg class="check-svg" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+
+        <div class="stepper-content" id="stepperContent">
+          <div class="step-panel active" id="p1">
+            <h3>🏫 School Education</h3>
+            <p>I completed my school education from <strong>Naktala High School</strong> in 2022, where I developed a strong academic foundation along with discipline, confidence, communication skills, and teamwork abilities. My school life played an important role in shaping my interest in computers and technology, which motivated me to choose the computer science field for my higher studies and future career goals.</p>
+          </div>
+          <div class="step-panel" id="p2">
+            <h3>🎓 Current Studies</h3>
+            <p>I am currently pursuing a <strong>BCS degree from SVIMS</strong> for the academic session 2024–2028. I am learning important subjects such as programming, database management systems, web technologies, and software development concepts. My college journey is helping me strengthen both technical knowledge and practical skills through projects, assignments, and continuous learning experiences.</p>
+          </div>
+          <div class="step-panel" id="p3">
+            <h3>🚀 Future Goals</h3>
+            <p>My future goal is to complete an <strong>MCA degree before 2030</strong> to gain advanced knowledge in computer applications, software engineering, and modern programming technologies. I believe pursuing MCA will help me improve my professional qualifications, deepen my technical expertise, and prepare me for better opportunities in the IT industry through internships and practical learning.</p>
+          </div>
+          <div class="step-panel" id="p4">
+            <h3>💻 Full Stack Development</h3>
+            <p>I have a strong interest in <strong>Full Stack Development</strong> because it allows me to work on both frontend and backend technologies. I enjoy learning HTML, CSS, JavaScript, databases, and backend frameworks to build complete and interactive web applications. My goal is to become a skilled full stack developer and build modern, user-friendly, and efficient applications in the future.</p>
+          </div>
+        </div>
+
+        <div class="stepper-actions">
+          <button class="btn-sprev" id="prevBtn" disabled>Prev</button>
+          <button class="btn-snext" id="nextBtn">Next</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Skills -->
+  <section id="se3" class="section animated-section">
+    <div class="moth2 animate" style="padding:0;overflow:hidden;">
+      <div id="torus-wrapper">
+        <div id="torus-canvas-area"></div>
+        <div class="marquee-container">
+          <div class="marquee-viewport">
+            <div class="marquee-track" id="torusTrack"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Work -->
+  <section id="se4" class="section animated-section">
+    <div class="moth3 animate">
+      <div class="text-work">
+        <h1>Works</h1>
+      </div>
+      <div class="container">
+        <img src="5.png" alt="" onclick="window.open('https://sayanbhattacharya6276-code.github.io/PORTFOLIO/','_blank')" style="cursor:pointer;">
+        <img src="1.png" alt="" onclick="window.open('https://sayanbhattacharya6276-code.github.io/CALCVERSE','_blank')" style="cursor:pointer;">
+        <img src="3.png" alt="" onclick="window.open('https://sayanbhattacharya6276-code.github.io/Colours/','_blank')" style="cursor:pointer;">
+        <img src="2.png" alt="" onclick="window.open('https://sayanbhattacharya6276-code.github.io/Chess/','_blank')" style="cursor:pointer;">
+        <img src="4.png" alt="" onclick="window.open('https://sayanbhattacharya6276-code.github.io/snake/','_blank')" style="cursor:pointer;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Contact -->
+  <section id="se5" class="section animated-section">
+    <div class="moth4 animate">
+      <div class="contact-root">
+        <div class="contact-label">Get in touch</div>
+        <h2 class="contact-h1">Contact Me</h2>
+        <div class="card-list" id="cardList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal & Backdrop -->
+  <div id="cModal">
+    <div class="c-modal-accent-bar"></div>
+    <button class="c-modal-close" id="cModalClose" aria-label="Close">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div id="cBackdrop"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ── Torus (Skills section) ──
+    (function() {
+      const canvasArea = document.getElementById('torus-canvas-area');
+      if (!canvasArea) return;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvasArea.clientWidth / canvasArea.clientHeight, 0.1, 100);
+      camera.position.set(0, -0.3, 8);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(canvasArea.clientWidth, canvasArea.clientHeight);
+      renderer.setClearColor(0xf7ddc3, 1);
+      canvasArea.appendChild(renderer.domElement);
+      let mesh = null;
+      function buildShape(numFins) {
+        if (mesh) { scene.remove(mesh); mesh.geometry && mesh.geometry.dispose(); if (mesh.material) { mesh.material.forEach ? mesh.material.forEach(m => m.dispose()) : mesh.material.dispose(); } }
+        const group = new THREE.Group();
+        const R = 1.54, finH = 0.605, finW = 0.018, twistTurns = 1, wobbleAmp = 0.13, wobbleSides = 7;
+        const matOrange = new THREE.MeshPhongMaterial({ color: 0x742eff, shininess: 60, side: THREE.DoubleSide });
+        const matGray   = new THREE.MeshPhongMaterial({ color: 0xb6a0fa, shininess: 40, side: THREE.DoubleSide });
+        const bladesPerPos = 14, bladeSpread = 0.045;
+        for (let i = 0; i < numFins; i++) {
+          const t = i / numFins, angle = t * Math.PI * 2;
+          const r = R + wobbleAmp * Math.cos(wobbleSides * angle);
+          const cx = r * Math.cos(angle), cy = r * Math.sin(angle), cz = 0;
+          const twist = t * twistTurns * Math.PI * 2;
+          const tx = -Math.sin(angle), ty = Math.cos(angle), tz = 0;
+          const mat = (t < 0.22 || t > 0.97) ? matOrange : matGray;
+          const tangent = new THREE.Vector3(tx, ty, tz);
+          const twistedUp = new THREE.Vector3(0,0,1).applyAxisAngle(tangent, twist).normalize();
+          for (let b = 0; b < bladesPerPos; b++) {
+            const offset = (b - (bladesPerPos - 1) / 2) * bladeSpread;
+            const fin = new THREE.Mesh(new THREE.BoxGeometry(finW, finH, finH * 0.08), mat);
+            fin.position.set(cx + twistedUp.x * offset, cy + twistedUp.y * offset, cz + twistedUp.z * offset);
+            fin.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), new THREE.Vector3(tx,ty,tz));
+            const twistQ = new THREE.Quaternion();
+            twistQ.setFromAxisAngle(new THREE.Vector3(tx,ty,tz), twist);
+            fin.quaternion.premultiply(twistQ);
+            group.add(fin);
+          }
+        }
+        scene.add(group);
+        return group;
+      }
+      mesh = buildShape(120);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      const d1 = new THREE.DirectionalLight(0xfff5ee, 1.2); d1.position.set(3,5,4);   scene.add(d1);
+      const d2 = new THREE.DirectionalLight(0xffd0b5, 0.6); d2.position.set(-4,-2,2); scene.add(d2);
+      const d3 = new THREE.DirectionalLight(0xffffff, 0.3); d3.position.set(0,0,-5);  scene.add(d3);
+      let isDragging = false, prevMouse = {x:0,y:0}, rotVel = {x:0,y:0};
+      renderer.domElement.addEventListener('mousedown',  e => { isDragging=true; prevMouse={x:e.clientX,y:e.clientY}; rotVel={x:0,y:0}; });
+      renderer.domElement.addEventListener('mousemove',  e => { if(!isDragging)return; const dx=e.clientX-prevMouse.x,dy=e.clientY-prevMouse.y; rotVel.x=dy*0.005; rotVel.y=dx*0.005; mesh.rotation.x+=rotVel.x; mesh.rotation.y+=rotVel.y; prevMouse={x:e.clientX,y:e.clientY}; });
+      renderer.domElement.addEventListener('mouseup',    () => { isDragging=false; });
+      renderer.domElement.addEventListener('mouseleave', () => { isDragging=false; });
+      renderer.domElement.addEventListener('touchstart', e => { isDragging=true; prevMouse={x:e.touches[0].clientX,y:e.touches[0].clientY}; rotVel={x:0,y:0}; });
+      renderer.domElement.addEventListener('touchmove',  e => { if(!isDragging)return; const dx=e.touches[0].clientX-prevMouse.x,dy=e.touches[0].clientY-prevMouse.y; rotVel.x=dy*0.005; rotVel.y=dx*0.005; mesh.rotation.x+=rotVel.x; mesh.rotation.y+=rotVel.y; prevMouse={x:e.touches[0].clientX,y:e.touches[0].clientY}; });
+      renderer.domElement.addEventListener('touchend',   () => { isDragging=false; });
+      const speed = 0.006;
+      window.addEventListener('resize', () => {
+        camera.aspect = canvasArea.clientWidth / canvasArea.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvasArea.clientWidth, canvasArea.clientHeight);
+      });
+      function animateTorus() {
+        requestAnimationFrame(animateTorus);
+        if (!isDragging) { mesh.rotation.y += speed; mesh.rotation.x += speed * 0.3; }
+        if (!isDragging && (Math.abs(rotVel.x) > 0.0001 || Math.abs(rotVel.y) > 0.0001)) {
+          mesh.rotation.x += rotVel.x; mesh.rotation.y += rotVel.y;
+          rotVel.x *= 0.92; rotVel.y *= 0.92;
+        }
+        renderer.render(scene, camera);
+      }
+      animateTorus();
+
+      // ── Marquee ──
+      const techs = [
+        { name:'HTML',       color:'#e44d26', svg:`<svg viewBox="0 0 452 520" xmlns="http://www.w3.org/2000/svg"><path d="M41 460L0 0h451l-41 460-185 52L41 460z" fill="#e44d26"/><path d="M226 472l149-41 35-394H226V472z" fill="#f16529"/><path d="M226 208h-75l-5-58h80V94H84l12 141h130v.1L226 208zm0 146l-.4.1-63-17-4-45h-56l8 87 115 32V354z" fill="#ebebeb"/><path d="M226 208v56h70l-7 73-63 17v58l115-32 8-87 9-85H226zm0-114v56h138l2.5-28 2.5-28H226z" fill="#fff"/></svg>` },
+        { name:'CSS',        color:'#1572b6', svg:`<svg viewBox="0 0 452 520" xmlns="http://www.w3.org/2000/svg"><path d="M41 460L0 0h451l-41 460-185 52L41 460z" fill="#1572b6"/><path d="M226 472l149-41 35-394H226V472z" fill="#33a9dc"/><path d="M226 250H116l4 44h106v-.1L226 294zm0-106H96l4 44h126V144zm0 210l-.4.1-63-17-4-45h-44l8 87 103 29V354z" fill="#ebebeb"/><path d="M226 250v44h101l-9.5 106-91.5 25V479l104-28.8 2.3-28 10-111.2H226zm0-106v44h129l1.2-13.4L358 148H226z" fill="#fff"/></svg>` },
+        { name:'JavaScript', color:'#f7df1e', svg:`<svg viewBox="0 0 630 630" xmlns="http://www.w3.org/2000/svg"><rect width="630" height="630" fill="#f7df1e"/><path d="M423 492c8 13 19 22 38 22 16 0 26-8 26-19 0-13-11-18-28-26l-10-4c-28-12-46-27-46-58 0-29 22-51 56-51 24 0 42 9 54 31l-30 19c-7-12-14-16-24-16-11 0-18 7-18 16 0 11 7 15 23 22l10 4c33 14 51 29 51 61 0 35-27 54-64 54-36 0-59-17-70-39zm-122 3c6 10 11 19 24 19 12 0 20-5 20-24V302h38v192c0 40-23 57-57 57-31 0-49-16-58-35z"/></svg>` },
+        { name:'React',      color:'#61dafb', svg:`<svg viewBox="-11.5 -10.23 23 20.46" xmlns="http://www.w3.org/2000/svg"><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>` },
+        { name:'Node.js',    color:'#339933', svg:`<svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 508c-6.7 0-13.5-1.8-19.4-5.2l-61.7-36.5c-9.2-5.2-4.7-7-1.7-8 12.3-4.3 14.8-5.2 27.9-12.7 1.4-.8 3.2-.5 4.6.4l47.4 28.1c1.7 1 4.1 1 5.7 0l184.7-106.6c1.7-1 2.8-3 2.8-5V149.3c0-2.1-1.1-4-2.9-5.1L226.8 37.7c-1.7-1-4-1-5.7 0L36.6 144.3c-1.8 1.1-2.9 3-2.9 5.1v213.1c0 2 1.1 4 2.9 4.9l50.6 29.2c27.5 13.7 44.3-2.4 44.3-18.7V167.5c0-3 2.4-5.3 5.4-5.3h23.4c2.9 0 5.4 2.3 5.4 5.3V378c0 36.6-20 57.6-54.7 57.6-10.7 0-19.1 0-42.5-11.6l-48.4-27.9C8.9 389.2.7 376.3.7 362.4V149.3c0-13.8 8.2-26.8 21.4-33.8L207 9c12.9-6.6 30.1-6.6 43 0l184.7 106.5c13.2 7.1 21.4 20 21.4 33.8v213.1c0 13.8-8.2 26.7-21.4 33.8L243.4 502.8c-5.9 3.4-12.6 5.2-19.4 5.2z" fill="#339933"/></svg>` },
+        { name:'Three.js',   color:'#ffffff', svg:`<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><path d="M2 2l41 123 83-123H2zm79 107L18 18h88L81 109z" fill="white"/></svg>` },
+        { name:'TypeScript', color:'#3178c6', svg:`<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" rx="24" fill="#3178c6"/><path d="M87 245v22c6 3 13 5 22 7 8 2 17 2 26 2 9 0 17-1 25-3s14-5 20-9 10-9 13-15c3-7 4-14 4-23 0-7-1-13-3-18s-5-10-9-14-9-8-14-11-11-7-17-10c-5-3-9-5-13-8s-7-5-10-7-4-5-6-7-2-5-2-8 1-6 2-8 3-4 5-6 5-3 8-4 7-1 10-1c3 0 6 0 9 1l8 2 7 3 6 3v-21l-18-5-21-2c-9 0-17 1-24 3s-14 5-19 9-10 9-13 15-4 14-4 22c0 11 3 21 9 29s15 15 27 21c5 3 10 5 14 8s8 5 11 8 5 6 7 9 3 6 3 10c0 3 0 6-2 8s-3 5-5 7-5 3-9 4-7 2-11 2c-8 0-16-1-23-4s-13-6-18-10zm162-130h-52v-22h133v22h-52v148h-29V115z" fill="white"/></svg>` },
+        { name:'Vue',        color:'#42b883', svg:`<svg viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg"><path d="M161.096 0l-30.224 52.352L100.647 0H0l130.872 226.69L261.76 0z" fill="#41b883"/><path d="M161.096 0l-30.224 52.352L100.647 0H52.346l78.526 136.01L209.4 0z" fill="#34495e"/></svg>` },
+        { name:'GSAP',       color:'#88ce02', svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="12" fill="#0d1117"/><text x="50" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="28" font-weight="900" fill="#88ce02">GSAP</text></svg>` },
+        { name:'Vite',       color:'#646cff', svg:`<svg viewBox="0 0 410 404" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="va" x1="6" y1="32.5" x2="235" y2="344" gradientUnits="userSpaceOnUse"><stop stop-color="#41d1ff"/><stop offset="1" stop-color="#bd34fe"/></linearGradient><linearGradient id="vb" x1="194.651" y1="8.818" x2="236.076" y2="292.989" gradientUnits="userSpaceOnUse"><stop stop-color="#ff3e00"/><stop offset=".33" stop-color="#ff4400"/><stop offset="1" stop-color="#ffd438"/></linearGradient></defs><path d="M399.641 59.525l-183.998 329.09c-3.518 6.294-12.319 6.294-15.824 0L11.159 59.525c-3.845-6.876 1.408-15.25 9.241-14.676l183.998 13.206a9 9 0 001.27 0l183.998-13.206c7.82-.574 13.086 7.8 9.975 14.676z" fill="url(#va)"/><path d="M292.965 1.243L154.975 28.44a4.5 4.5 0 00-3.612 4.363v69.686a4.5 4.5 0 005.119 4.456l40.894-4.781c4.009-.469 7.36 2.864 6.91 6.876l-4.918 43.13c-.458 4.03 2.93 7.368 6.952 6.867l25.214-3.045c4.034-.488 7.43 2.878 6.946 6.918l-7.777 59.35c-.487 3.717 4.302 5.781 6.43 2.659l1.504-2.32 83.193-165.44c2.143-4.262-1.508-9.098-6.215-8.264l-42.001 7.79a4.5 4.5 0 01-5.18-5.528l11.254-49.08a4.5 4.5 0 00-5.893-5.293z" fill="url(#vb)"/></svg>` },
+      ];
+      const track = document.getElementById('torusTrack');
+      const allItems = [...techs, ...techs, ...techs];
+      allItems.forEach((tech, i) => {
+        const item = document.createElement('div');
+        item.className = 'tech-item';
+        item.style.setProperty('--tech-color', tech.color);
+        item.innerHTML = `<div class="tech-logo">${tech.svg}</div><span class="tech-name">${tech.name}</span>`;
+        track.appendChild(item);
+        if (i < allItems.length - 1) {
+          const div = document.createElement('div');
+          div.className = 'tech-divider';
+          div.innerHTML = `<svg viewBox="0 0 8 8" width="8" height="8"><circle cx="4" cy="4" r="2.5" fill="currentColor"/></svg>`;
+          track.appendChild(div);
+        }
+      });
+      // Recalculate marquee animation width after items render
+      setTimeout(() => {
+        const oneSetWidth = track.scrollWidth / 3;
+        const style = document.createElement('style');
+        style.textContent = `@keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-${oneSetWidth}px); } }`;
+        document.head.appendChild(style);
+      }, 100);
+    })();
+  </script>
+
+  <script>
+    // ── Stepper Logic ──
+    (function(){
+      const TOTAL = 4, DURATION = 280;
+      let current = 1, animating = false;
+      const stepEls    = Array.from({length: TOTAL},   (_, i) => document.getElementById(`s${i+1}`));
+      const connectors = Array.from({length: TOTAL-1}, (_, i) => document.getElementById(`c${i+1}`));
+      const panels     = Array.from({length: TOTAL},   (_, i) => document.getElementById(`p${i+1}`));
+      const prevBtn    = document.getElementById('prevBtn');
+      const nextBtn    = document.getElementById('nextBtn');
+
+      function showPanel(nextIndex, dir) {
+        const incoming = panels[nextIndex];
+        const outgoing = panels.find(p => p.classList.contains('active'));
+        const exitTo    = dir === 'next' ? 'translateX(-28px)' : 'translateX(28px)';
+        const enterFrom = dir === 'next' ? 'translateX(28px)'  : 'translateX(-28px)';
+        if (outgoing && outgoing !== incoming) {
+          outgoing.style.transition = `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`;
+          outgoing.style.opacity = '0'; outgoing.style.transform = exitTo;
+          setTimeout(() => { outgoing.classList.remove('active'); outgoing.style.transition = outgoing.style.opacity = outgoing.style.transform = ''; }, DURATION);
+        }
+        incoming.style.transition = 'none'; incoming.style.opacity = '0'; incoming.style.transform = enterFrom;
+        incoming.classList.add('active');
+        incoming.getBoundingClientRect();
+        incoming.style.transition = `opacity ${DURATION}ms ease, transform ${DURATION}ms ease`;
+        incoming.style.opacity = '1'; incoming.style.transform = 'translateX(0)';
+        setTimeout(() => { incoming.style.transition = ''; animating = false; updateButtons(); }, DURATION);
+      }
+
+      function updateButtons() {
+        prevBtn.disabled = current === 1;
+        nextBtn.disabled = current === TOTAL;
+      }
+
+      function update(dir) {
+        if (animating) return;
+        const prev = current;
+        if (dir === 'next' && current < TOTAL) current++;
+        else if (dir === 'prev' && current > 1) current--;
+        if (prev === current) return;
+        animating = true; prevBtn.disabled = true; nextBtn.disabled = true;
+        showPanel(current - 1, dir);
+        stepEls.forEach((el, i) => {
+          el.classList.remove('active', 'done');
+          if (i + 1 < current) el.classList.add('done');
+          else if (i + 1 === current) el.classList.add('active');
+        });
+        connectors.forEach((c, i) => { c.classList.remove('filled'); if (i + 1 < current) c.classList.add('filled'); });
+      }
+
+      prevBtn.addEventListener('click', () => update('prev'));
+      nextBtn.addEventListener('click', () => update('next'));
+    })();
+
+    // ── Hero typing animation ──
+    (function(){
+      const words = ['Sayan Bhattacharya','Web Designer','Developer'];
+      let wi=0,ci=0,deleting=false;
+      const el = document.getElementById('typedText');
+      function type(){
+        const word = words[wi];
+        if(!deleting){ el.textContent = word.slice(0,++ci); if(ci===word.length){deleting=true;setTimeout(type,1600);return;} }
+        else{ el.textContent = word.slice(0,--ci); if(ci===0){deleting=false;wi=(wi+1)%words.length;} }
+        setTimeout(type, deleting?60:100);
+      }
+      type();
+      // Trigger entrance animations
+      setTimeout(()=>{
+        document.getElementById('heroLeft').classList.add('visible');
+        document.getElementById('heroRight').classList.add('visible');
+        setTimeout(()=>{
+          document.getElementById('heroRole').classList.add('visible');
+          document.getElementById('heroBio').classList.add('visible');
+          document.getElementById('heroCta').classList.add('visible');
+        },400);
+      },100);
+    })();
+
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.closest('a').getAttribute('href').replace('#', '');
+        const section = document.getElementById(targetId);
+        if (section) {
+          const animatedElements = section.querySelectorAll('.inner, .inner1, .text, .text1');
+          animatedElements.forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = 'fadeSlideIn 1.5s ease forwards';
+          });
+        }
+      });
+    });
+
+    // ── Contact Cards ──
+    const contactItems = [
+      {
+        id:"github", title:"GitHub", subtitle:"Sayan Bhattacharya", badge:"Code",
+        details:"Check out my open source projects, contributions, and repositories. From side experiments to production-grade tools.",
+        handle:"https://github.com/sayanbhattacharya6276-code", url:"https://github.com/sayanbhattacharya6276-code", btnLabel:"View Profile",
+        icon:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.014-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.337-.012 2.415-.012 2.742 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" fill="#24292f"/></svg>`
+      },
+      {
+        id:"email", title:"Email", subtitle:"sayanbhattacharya6276@gmail.com", badge:"Direct",
+        details:"Prefer the old-fashioned way? Drop me a line for collaborations, inquiries, or just to say hi.",
+        handle:"sayanbhattacharya6276@gmail.com", url:"mailto:sayanbhattacharya6276@gmail.com", btnLabel:"Send Email",
+        icon:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#ea4335" stroke-width="1.8" fill="none"/><path d="M2 7l10 7 10-7" stroke="#ea4335" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+      },
+      {
+        id:"instagram", title:"Instagram", subtitle:"bytebybuddy", badge:"Photos",
+        details:"Behind-the-scenes, travel snapshots, and creative work. Follow along for the visual diary.",
+        handle:"bytebybuddy", url:"https://www.instagram.com/bytebybuddy?igsh=MTY4MHdxcWl3eWFoNQ==", btnLabel:"Follow",
+        icon:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#igGrad)" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="4.5" stroke="url(#igGrad)" stroke-width="1.8" fill="none"/><circle cx="17.5" cy="6.5" r="1" fill="#e1306c"/><defs><linearGradient id="igGrad" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f58529"/><stop offset="50%" stop-color="#dd2a7b"/><stop offset="100%" stop-color="#8134af"/></linearGradient></defs></svg>`
+      },
+      {
+        id:"x", title:"X (Twitter)", subtitle:"Sayan Bhattacharya", badge:"Updates",
+        details:"Thoughts, threads, and real-time updates on things I'm building, reading, or thinking about.",
+        handle:"https://x.com/why_sayan", url:"https://x.com/why_sayan", btnLabel:"Follow on X",
+        icon:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#000000"/></svg>`
+      },
+      {
+        id:"facebook", title:"Facebook", subtitle:"Sayan Bhattacharya", badge:"Connect",
+        details:"Find me on Facebook for updates, longer posts, and connecting with the broader community.",
+        handle:"https://www.facebook.com/share/17A5JyHnKr/", url:"https://www.facebook.com/share/17A5JyHnKr/", btnLabel:"Add Friend",
+        icon:`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" fill="#1877f2"/></svg>`
+      }
+    ];
+
+    const cList     = document.getElementById('cardList');
+    const cModal    = document.getElementById('cModal');
+    const cBackdrop = document.getElementById('cBackdrop');
+    const cClose    = document.getElementById('cModalClose');
+    let cActiveSource = null, cIsOpen = false;
+
+    contactItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'contact-card';
+      card.setAttribute('data-id', item.id);
+      card.innerHTML = `
+        <div class="c-card-header">
+          <div class="c-icon-wrap">${item.icon}</div>
+          <div class="c-card-meta">
+            <div class="c-card-title">${item.title}</div>
+            <div class="c-card-subtitle">${item.subtitle}</div>
+          </div>
+          <div><span class="c-card-badge">${item.badge}</span></div>
+          <svg class="c-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>`;
+      card.addEventListener('click', () => !cIsOpen && openCModal(card, item));
+      cList.appendChild(card);
+    });
+
+    function openCModal(sourceCard, item) {
+      cIsOpen = true; cActiveSource = sourceCard;
+      const rect = sourceCard.getBoundingClientRect();
+      cModal.setAttribute('data-id', item.id);
+      const oh = cModal.querySelector('.c-card-header');
+      const ob = cModal.querySelector('.c-modal-body');
+      if (oh) oh.remove(); if (ob) ob.remove();
+      const header = document.createElement('div');
+      header.className = 'c-card-header';
+      header.innerHTML = `<div class="c-icon-wrap">${item.icon}</div><div class="c-card-meta"><div class="c-card-title">${item.title}</div><div class="c-card-subtitle">${item.subtitle}</div></div><div><span class="c-card-badge">${item.badge}</span></div>`;
+      const body = document.createElement('div');
+      body.className = 'c-modal-body';
+      body.innerHTML = `
+        <p class="c-card-details">${item.details}</p>
+        <div class="c-card-handle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          ${item.handle}
+        </div>
+        <a href="${item.url}" class="c-visit-btn" target="_blank" rel="noopener">${item.btnLabel}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>`;
+      cModal.appendChild(header); cModal.appendChild(body);
+      cModal.classList.remove('transitioning','closing','open');
+      cModal.style.top=rect.top+'px'; cModal.style.left=rect.left+'px';
+      cModal.style.width=rect.width+'px'; cModal.style.height=rect.height+'px'; cModal.style.opacity='0';
+      document.querySelectorAll('.contact-card').forEach(c => {
+        if(c===sourceCard) c.classList.add('source-hidden'); else c.classList.add('dimmed');
+      });
+      cBackdrop.classList.add('visible');
+      const tw=Math.min(600,window.innerWidth-48), th=340;
+      const tl=(window.innerWidth-tw)/2, tt=(window.innerHeight-th)/2;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        cModal.classList.add('transitioning');
+        cModal.style.top=tt+'px'; cModal.style.left=tl+'px';
+        cModal.style.width=tw+'px'; cModal.style.height=th+'px'; cModal.style.opacity='1';
+        setTimeout(()=>cModal.classList.add('open'),80);
+      }));
+    }
+
+    function closeCModal() {
+      if(!cIsOpen) return; cIsOpen=false;
+      cModal.classList.remove('open'); cModal.classList.add('closing');
+      cBackdrop.classList.remove('visible');
+      if(cActiveSource){
+        const rect=cActiveSource.getBoundingClientRect();
+        cActiveSource.classList.remove('source-hidden');
+        cModal.style.top=rect.top+'px'; cModal.style.left=rect.left+'px';
+        cModal.style.width=rect.width+'px'; cModal.style.height=rect.height+'px'; cModal.style.opacity='0';
+      }
+      setTimeout(()=>{
+        document.querySelectorAll('.contact-card').forEach(c=>c.classList.remove('dimmed','source-hidden'));
+        cModal.classList.remove('transitioning','closing');
+        cModal.style.width='0'; cModal.style.height='0'; cActiveSource=null;
+      },150);
+    }
+
+    cClose.addEventListener('click',e=>{e.stopPropagation();closeCModal();});
+    cBackdrop.addEventListener('click',closeCModal);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCModal();});
+  </script>
+
+  <script>
+const lenis = new Lenis({
+  duration: 1.2,
+  smoothWheel: true,
+  smoothTouch: false
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
+</script>
+
+</body>
+</html>
