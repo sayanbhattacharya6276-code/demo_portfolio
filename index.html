@@ -28,19 +28,93 @@ body {
   min-width: 100%; min-height: 100%;
 }
 
-/* ── Header ── */
+/* ── Header / Nav ── */
 header {
-  background: transparent;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
   color: white;
-  padding: 20px;
+  padding: 12px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   top: 0; width: 100%;
   z-index: 1000;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
 }
-.logo { display: flex; gap: 70px; }
+header.nav-visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+/* Nav links — centred row */
+.nav-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.nav-links a {
+  text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  padding: 7px 18px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.18s;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 72px; gap: 6px;
+}
+.nav-links a:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-1px);
+}
+/* Active = animated SVG icon replaces text */
+.nav-links a .nav-label { transition: opacity 0.2s; }
+.nav-links a .nav-icon  { display: none; width: 18px; height: 18px; }
+.nav-links a.nav-active {
+  background: rgba(89,24,194,0.72);
+  border-color: var(--accent);
+  color: #fff;
+  pointer-events: none;
+  min-width: 44px;
+  padding: 7px 14px;
+}
+.nav-links a.nav-active .nav-label { display: none; }
+.nav-links a.nav-active .nav-icon  {
+  display: block;
+  animation: navIconPop 0.45s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes navIconPop {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60%  { transform: scale(1.25) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+/* spinning ring on active icon */
+.nav-links a.nav-active .nav-icon svg {
+  animation: navIconSpin 2.4s linear infinite;
+  transform-origin: center;
+}
+@keyframes navIconSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+/* stop spin on non-rotating icons */
+.nav-links a.nav-active[data-section="se1"] .nav-icon svg,
+.nav-links a.nav-active[data-section="se2"] .nav-icon svg,
+.nav-links a.nav-active[data-section="se4"] .nav-icon svg { animation: none; }
 .btn {
   width: 10vh; height: 30px; padding: 2px;
   border-radius: 10px; border: 1px solid #000;
@@ -76,24 +150,6 @@ section {
 .moth1 { flex-direction: row; justify-content: space-around; gap: 100px; }
 .moth2 { flex-direction: column; justify-content: space-around; gap: 50px; }
 
-/* ── Inner image (fallback) ── */
-.inner1 {
-  width: 45vh; height: 600px;
-  background-color: #803dec;
-  background-image: url(IMG_20250313_104217-removebg-preview.png);
-  background-repeat: no-repeat; background-size: cover; background-position: center;
-  border: 1px solid #000;
-  border-radius: 100px;
-  opacity: 0;
-  animation: fadeSlideIn 1.2s ease forwards;
-}
-
-/* ── Text ── */
-.text, .text1 {
-  color: black; font-size: 40px; text-align: center;
-  font-family: Copperplate; width: 50vh;
-  animation: fadeSlideIn 1.2s ease forwards;
-}
 p {
   font-family: 'Gill Sans', Calibri, sans-serif;
   color: black; font-size: 21px; text-align: center;
@@ -110,8 +166,7 @@ h1 { color: #000; font-size: 40px; font-weight: 700; font-family: Verdana, sans-
 }
 .hover-underline-animation:hover::after { transform: scaleX(1); }
 
-/* ── "I'am" ── */
-.tt::after { content: " Sayan"; font-size: 80px; color: #5918c2; font-weight: 700; }
+
 
 /* ── Glow Button ── */
 .glow-on-hover {
@@ -435,14 +490,29 @@ h1 { color: #000; font-size: 40px; font-weight: 700; font-family: Verdana, sans-
     <source src="vid.mp4" type="video/mp4">
   </video>
 
-  <header>
-    <div class="logo">
-      <a href="#se1"><button class="btn">Home</button></a>
-      <a href="#se2"><button class="btn">About</button></a>
-      <a href="#se3"><button class="btn">Skills</button></a>
-      <a href="#se4"><button class="btn">Work</button></a>
-      <a href="#se5"><button class="btn">Contact</button></a>
-    </div>
+  <header id="mainNav">
+    <nav class="nav-links">
+      <a href="#se1" data-section="se1">
+        <span class="nav-label">Home</span>
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21V12h6v9"/></svg></span>
+      </a>
+      <a href="#se2" data-section="se2">
+        <span class="nav-label">About</span>
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      </a>
+      <a href="#se3" data-section="se3">
+        <span class="nav-label">Skills</span>
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      </a>
+      <a href="#se4" data-section="se4">
+        <span class="nav-label">Work</span>
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></span>
+      </a>
+      <a href="#se5" data-section="se5">
+        <span class="nav-label">Contact</span>
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+      </a>
+    </nav>
   </header>
 
   <!-- Section 1: Home -->
@@ -784,20 +854,43 @@ h1 { color: #000; font-size: 40px; font-weight: 700; font-family: Verdana, sans-
       },100);
     })();
 
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.closest('a').getAttribute('href').replace('#', '');
-        const section = document.getElementById(targetId);
-        if (section) {
-          const animatedElements = section.querySelectorAll('.inner, .inner1, .text, .text1');
-          animatedElements.forEach(el => {
-            el.style.animation = 'none';
-            void el.offsetWidth;
-            el.style.animation = 'fadeSlideIn 1.5s ease forwards';
-          });
+    // ── Nav: show on scroll past hero, highlight active section ──
+    (function(){
+      const nav = document.getElementById('mainNav');
+      const hero = document.getElementById('se1');
+      const sections = ['se1','se2','se3','se4','se5'];
+      const navLinks = document.querySelectorAll('.nav-links a');
+
+      function updateNav() {
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        // Show nav only when scrolled past hero section
+        if (heroBottom <= 0) {
+          nav.classList.add('nav-visible');
+        } else {
+          nav.classList.remove('nav-visible');
         }
-      });
-    });
+        // Active section detection
+        let currentSection = '';
+        sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+              currentSection = id;
+            }
+          }
+        });
+        navLinks.forEach(link => {
+          link.classList.remove('nav-active');
+          if (link.dataset.section === currentSection) {
+            link.classList.add('nav-active');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    })();
 
     // ── Contact Cards ──
     const contactItems = [
